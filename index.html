@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Не курю! 💚</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            color: #2ecc71;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1em;
+            margin-bottom: 40px;
+        }
+
+        .stats-box {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .stat-item {
+            margin-bottom: 25px;
+        }
+
+        .stat-label {
+            color: #34495e;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .stat-value {
+            color: #2ecc71;
+            font-size: 2.2em;
+            font-weight: bold;
+            word-break: break-all;
+        }
+
+        .money-value {
+            color: #27ae60;
+            font-size: 2.8em;
+            background: rgba(46, 204, 113, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 5px;
+        }
+
+        .blocks-grid {
+            display: grid;
+            grid-template-columns: repeat(30, 1fr);
+            gap: 4px;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .block {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            border-radius: 3px;
+            box-shadow: 0 2px 5px rgba(46, 204, 113, 0.3);
+            animation: popIn 0.5s ease-out forwards;
+        }
+
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: scale(0) rotate(-180deg);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) rotate(0);
+            }
+        }
+
+        .block.new {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            animation: popIn 0.6s ease-out;
+        }
+
+        .info-section {
+            background: #ecf0f1;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+            font-size: 0.9em;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .stat-value {
+                font-size: 1.8em;
+            }
+
+            .money-value {
+                font-size: 2.2em;
+            }
+
+            .blocks-grid {
+                gap: 3px;
+            }
+
+            .stats-box {
+                padding: 20px;
+            }
+        }
+
+        .motivation {
+            color: #27ae60;
+            font-style: italic;
+            margin-top: 20px;
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>💚 Не курю! 💚</h1>
+        <div class="subtitle">Путь к здоровью начался</div>
+
+        <div class="stats-box">
+            <div class="stat-item">
+                <div class="stat-label">Прошло времени</div>
+                <div class="stat-value" id="timeValue">00:00:00</div>
+            </div>
+
+            <div class="stat-item">
+                <div class="stat-label">Сэкономлено денег</div>
+                <div class="money-value" id="moneyValue">0.00 ₽</div>
+            </div>
+
+            <div class="motivation" id="motivation"></div>
+        </div>
+
+        <div class="blocks-grid" id="blocksGrid"></div>
+
+        <div class="info-section">
+            <strong>Начало:</strong> 13 августа 2026, 10:00<br>
+            <br>
+            <strong>Такое держать! Каждый день - это победа! 🎉</strong>
+        </div>
+    </div>
+
+    <script>
+        const startDate = new Date('2026-08-13T10:00:00').getTime();
+
+        const sigaretsBoxPrice = 285;
+        const pricePerDay = sigaretsBoxPrice / 7;
+
+        let animatedTime = 0;
+        let animatedMoney = 0;
+
+        function formatTime(milliseconds) {
+            const days = Math.floor(milliseconds / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((milliseconds % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((milliseconds % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((milliseconds % (1000 * 60)) / 1000);
+
+            return `${String(Math.floor(days)).padStart(2, '0')}:${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        function update() {
+            const now = new Date().getTime();
+            const elapsed = now - startDate;
+
+            animatedTime += (elapsed - animatedTime) * 0.1;
+            document.getElementById('timeValue').textContent = formatTime(animatedTime);
+
+            const elapsedDays = elapsed / (1000 * 60 * 60 * 24);
+            const targetMoney = elapsedDays * pricePerDay;
+            animatedMoney += (targetMoney - animatedMoney) * 0.1;
+
+            const moneyValue = animatedMoney.toFixed(8);
+            document.getElementById('moneyValue').textContent = `${moneyValue} ₽`;
+
+            const wholeDays = Math.floor(elapsedDays);
+            updateBlocks(wholeDays);
+
+            requestAnimationFrame(update);
+        }
+
+        let lastBlockCount = 0;
+
+        function updateBlocks(count) {
+            const grid = document.getElementById('blocksGrid');
+
+            if (count > lastBlockCount) {
+                for (let i = lastBlockCount; i < count; i++) {
+                    const block = document.createElement('div');
+                    block.className = 'block new';
+                    grid.appendChild(block);
+
+                    setTimeout(() => {
+                        block.classList.remove('new');
+                    }, 600);
+                }
+            }
+
+            lastBlockCount = count;
+        }
+
+        requestAnimationFrame(update);
+    </script>
+</body>
+</html>
